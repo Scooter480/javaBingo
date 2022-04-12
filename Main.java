@@ -12,7 +12,7 @@ public class Main {
 	}
 
 	// check which player has the highest number of marks on their board
-	private static int getMostMarks(ArrayList<bingoBoard> players) {
+	private static int getMostMarks(ArrayList<card> players) {
 		int most = 0;
 		int mostHigh = -1;
 		for (int i = 0; i < players.size(); i++) {
@@ -23,6 +23,33 @@ public class Main {
 		}
 		return mostHigh;
 	}
+	private static int callNumber(ArrayList<Integer> hopper){
+		// call each number in a random order
+		int calledI, called;
+		String prefix = "";
+		calledI = (int) (Math.random() * hopper.size() - 1);
+		called = hopper.get(calledI);
+		// add the bingo letters
+		if (called < 16)
+			prefix = "B";
+		else if (called < 33)
+			prefix = "I";
+		else if (called < 46)
+			prefix = "N";
+		else if (called < 61)
+			prefix = "G";
+		else
+			prefix = "O";
+		
+		System.out.println(prefix + called);
+		return calledI;
+	}
+	private static void printBothCards(card c){
+		System.out.println(c.getName());
+		c.printCard();
+		System.out.println();
+		c.printMarks();	
+	}
 
 	public static void main(String[] args) {
 		if (args.length > 0 && (args[0].equals("-h") || args[0].equals("--help"))) {
@@ -30,72 +57,46 @@ public class Main {
 		} else {
 			// create players from file of names
 			File nameFile = new File("names.txt");
-			ArrayList<bingoBoard> players = new ArrayList<bingoBoard>();
+			ArrayList<card> players = new ArrayList<card>();
 			try {
 				Scanner scanNames = new Scanner(nameFile);
 				while (scanNames.hasNextLine()) {
-					players.add(new bingoBoard(scanNames.nextLine()));
+					players.add(new card(scanNames.nextLine()));
 				}
 				scanNames.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}
-			for (int i = 0; i < 5; i++) {
-				players.get(i).newCard();
-			}
-			for (int i = 0; i < 5; i++) {
-				players.get(i).printCard();
-				System.out.println();
 			}
 			// create an arraylist with numbers from 1 to 75
 			ArrayList<Integer> hopper = new ArrayList<Integer>();
 			for (int i = 0; i < 75; i++) {
 				hopper.add(i);
 			}
-
-			// call each number in a random order
-			int calledI, called;
-			String prefix = "";
 			boolean winner = false;
-			for (int i = 0; i < 75; i++) {
-				calledI = (int) (Math.random() * hopper.size() - 1);
+			int calledI, called;
+			for (int i = 0; i < 75; i++){
+				calledI = callNumber(hopper);
 				called = hopper.get(calledI);
-				// add the bingo letters
-				if (called < 16)
-					prefix = "B";
-				else if (called < 33)
-					prefix = "I";
-				else if (called < 46)
-					prefix = "N";
-				else if (called < 61)
-					prefix = "G";
-				else
-					prefix = "O";
 				// mark the cards and print them out
-				System.out.println(prefix + called);
 				for (int j = 0; j < players.size() - 1; j++) {
 					players.get(j).markCard(called);
 					if (players.get(j).winnerFound()) {
-						System.out.println("WINNER: " + players.get(j).getName());
-						players.get(j).printCard();
-						System.out.println();
-						players.get(j).printMarks();
+						System.out.print("WINNER: ");
+						printBothCards(players.get(j));
 						winner = true;
 						break;
 					}
 				}
 				// remove the called number from the hopper
+				hopper.remove(calledI);
 				if (winner)
 					break;
-				hopper.remove(calledI);
 				// print the leader's name
-				System.out.println("Leader: " + players.get(getMostMarks(players)).getName());
-				players.get(getMostMarks(players)).printCard();
-				System.out.println();
-				players.get(getMostMarks(players)).printMarks();
+				System.out.print("Leader: " );
+				printBothCards(players.get(getMostMarks(players)));
+			}
 
 			}
 
 		}
 	}
-}

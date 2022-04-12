@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 //bingo card
-public class bingoBoard {
+public class card{
 	// attributes
 	private String name;
 	private int[][] numbers;
 	private boolean[][] marks;
 
 	// constructor
-	public bingoBoard(String name) {
+	public card(String name) {
 		this.name = name;
 		this.numbers = generateCard();
 		this.marks = new boolean[5][5];
