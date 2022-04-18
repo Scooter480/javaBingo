@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 //bingo card
-public class card{
+public class card {
 	// attributes
 	private String name;
 	private int[][] numbers;
@@ -41,7 +41,10 @@ public class card{
 		for (int rows = 0; rows < 5; rows++) {
 			System.out.print("|");
 			for (int columns = 0; columns < 5; columns++) {
-				System.out.print("\t" + numbers[rows][columns] + "\t|");
+				if (marks[rows][columns])
+					System.out.print("\t" + "\033[0;1m" + numbers[rows][columns] + "\033[0m" + "\t|");
+				else
+					System.out.print("\t" + numbers[rows][columns] + "\t|");
 			}
 			System.out.println();
 		}

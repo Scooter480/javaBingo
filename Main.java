@@ -50,13 +50,6 @@ public class Main {
 		return calledI;
 	}
 
-	private static void printBothCards(card c) {
-		System.out.println(c.getName());
-		c.printCard();
-		System.out.println();
-		c.printMarks();
-	}
-
 	public static void main(String[] args) {
 		if (args.length > 0 && (args[0].equals("-h") || args[0].equals("--help"))) {
 			help();
@@ -87,8 +80,8 @@ public class Main {
 				for (int j = 0; j < players.size() - 1; j++) {
 					players.get(j).markCard(called);
 					if (players.get(j).winnerFound()) {
-						System.out.print("WINNER: ");
-						printBothCards(players.get(j));
+						System.out.println("WINNER: " + players.get(j).getName());
+						players.get(j).printCard();
 						winner = true;
 						break;
 					}
@@ -98,8 +91,8 @@ public class Main {
 				if (winner)
 					break;
 				// print the leader's name
-				System.out.print("Leader: ");
-				printBothCards(players.get(getMostMarks(players)));
+				System.out.println("Leader: " + players.get(getMostMarks(players)).getName());
+				players.get(getMostMarks(players)).printCard();
 				if (args.length <= 0 || !(args[0].equals("-s"))) {
 					try {
 						System.out.println("Press enter to continue");
