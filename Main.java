@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 //driver class
 public class Main {
@@ -9,6 +10,9 @@ public class Main {
 		System.out.println("This software is licenced under the GNU GPL v3 and comes with absolutely NO WARRANTY");
 		System.out.println(
 				"javaBingo simulates bingo games with randomly generated boards and numbers. The names of the players are stored in names.txt");
+		System.out.println("ARGUMENTS:");
+		System.out.println("-h: display this help screen");
+		System.out.println("-s: skip the pause between each round");
 	}
 
 	// check which player has the highest number of marks on their board
@@ -23,7 +27,8 @@ public class Main {
 		}
 		return mostHigh;
 	}
-	private static int callNumber(ArrayList<Integer> hopper){
+
+	private static int callNumber(ArrayList<Integer> hopper) {
 		// call each number in a random order
 		int calledI, called;
 		String prefix = "";
@@ -40,15 +45,16 @@ public class Main {
 			prefix = "G";
 		else
 			prefix = "O";
-		
+
 		System.out.println(prefix + called);
 		return calledI;
 	}
-	private static void printBothCards(card c){
+
+	private static void printBothCards(card c) {
 		System.out.println(c.getName());
 		c.printCard();
 		System.out.println();
-		c.printMarks();	
+		c.printMarks();
 	}
 
 	public static void main(String[] args) {
@@ -74,7 +80,7 @@ public class Main {
 			}
 			boolean winner = false;
 			int calledI, called;
-			for (int i = 0; i < 75; i++){
+			for (int i = 0; i < 75; i++) {
 				calledI = callNumber(hopper);
 				called = hopper.get(calledI);
 				// mark the cards and print them out
@@ -92,11 +98,19 @@ public class Main {
 				if (winner)
 					break;
 				// print the leader's name
-				System.out.print("Leader: " );
+				System.out.print("Leader: ");
 				printBothCards(players.get(getMostMarks(players)));
-			}
-
+				if (args.length <= 0 || !(args[0].equals("-s"))) {
+					try {
+						System.out.println("Press enter to continue");
+						System.in.read();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 
 		}
+
 	}
+}
